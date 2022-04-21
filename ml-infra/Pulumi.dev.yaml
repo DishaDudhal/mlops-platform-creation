@@ -1,2 +1,4 @@
 config:
   aws:region: us-west-2
+  ml-infra:PULUMI_ACCESS_TOKEN:
+    secure: AAABAOGJ09d7BhL6q5gzdXdBtH0nJHjcgQBsACE29KSivSYomlg7/1kZiPSrCNVDvhEG6PLG5mGTalceXat8XVtLI/+WjcYjiqjjjg==
