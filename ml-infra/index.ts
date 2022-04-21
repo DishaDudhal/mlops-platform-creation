@@ -100,6 +100,12 @@ new TraefikRoute('mlflow', {
  console.log(traefik.getResource('v1/Service', 'traefik').status.loadBalancer.ingress[0].hostname);
  console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
+ const modelsServiceAccount = new S3ServiceAccount('models-service-account', {
+  namespace: 'default',
+  oidcProvider: cluster.core.oidcProvider!,
+  readOnly: true,
+}, { provider: cluster.provider });
 
 // Export the cluster's kubeconfig.
 export const kubeconfig = cluster.kubeconfig;
+export const modelsServiceAccountName = modelsServiceAccount.name;
