@@ -1,4 +1,4 @@
-# import os
+import os
 import uvicorn
 import mlflow
 import numpy as np
@@ -19,7 +19,7 @@ class PredictRequest(BaseModel):
 app = FastAPI()
 
 mlflow.set_tracking_uri('http://a3157ff74eea1473ea35353d2d9e1886-1998414389.us-west-2.elb.amazonaws.com/mlflow')
-model = mlflow.lightgbm.load_model("runs:/f414a3a3dd834d549c9af941dac15a9f/model")
+model = mlflow.lightgbm.load_model(f"runs:/{os.environ['MLFLOW_RUN_ID']}/model")
 flower_name_by_index = {0: 'Setosa', 1: 'Versicolor', 2: 'Virginica'}
 
 
