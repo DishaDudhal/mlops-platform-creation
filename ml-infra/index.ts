@@ -45,6 +45,11 @@ const mlflowDB = new aws.rds.Instance("mlflow-db", {
     vpcSecurityGroupIds: [cluster.clusterSecurityGroup.id, cluster.nodeSecurityGroup.id]
 });
 
+//creating an s3 bucket for data 
+const dataStorage = new aws.s3.Bucket("data-storage", {
+  acl: "public-read-write",
+});
+
 // Create S3 bucket for MLFlow
 const artifactStorage = new aws.s3.Bucket("artifact-storage", {
     acl: "public-read-write",
@@ -96,10 +101,6 @@ new TraefikRoute('mlflow', {
    records: [traefik.getResource('v1/Service', 'traefik').status.loadBalancer.ingress[0].hostname],
  });
 
- console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
- console.log(traefik.getResource('v1/Service', 'traefik').status.loadBalancer.ingress[0].hostname);
- console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-
  const modelsServiceAccount = new S3ServiceAccount('models-service-account', {
   namespace: 'default',
   oidcProvider: cluster.core.oidcProvider!,
@@ -109,3 +110,4 @@ new TraefikRoute('mlflow', {
 // Export the cluster's kubeconfig.
 export const kubeconfig = cluster.kubeconfig;
 export const modelsServiceAccountName = modelsServiceAccount.name;
+export const dvcBucketUrl = dataStorage.bucket.apply(bucketName => `s3://${bucketName}`);
